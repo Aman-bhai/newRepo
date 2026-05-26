@@ -1,0 +1,189 @@
+Example : Custom Control 
+------------------------
+
+demo.custom - Namespace
+customcontrol - module name
+
+
+===============================================================================
+manifest.json 
+{
+    "_version": "1.59.0",
+    "sap.app": {
+        "id": "demo.custom.customcontrol",
+        "type": "application",
+        "title": "Custom Control Demo",
+        "applicationVersion": {
+            "version": "1.0.0"
+        }
+    },
+
+    "sap.ui": {
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+
+    "sap.ui5": {
+        "rootView": {
+            "viewName": "demo.custom.customcontrol.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
+
+        "dependencies": {
+            "minUI5Version": "1.120.0",
+            "libs": {
+                "sap.m": {}
+            }
+        }
+    }
+}
+
+==================================================================================
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Custom Control Demo</title>
+
+    <script
+        id="sap-ui-bootstrap"
+        src="https://ui5.sap.com/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-libs="sap.m"
+        data-sap-ui-async="true"
+        data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
+        data-sap-ui-resourceRoots='{
+            "demo.custom.customcontrol": "./"
+        }'>
+    </script>
+
+</head>
+
+<body class="sapUiBody sapUiSizeCompact">
+
+    <div
+        data-sap-ui-component
+        data-name="demo.custom.customcontrol"
+        data-id="container"
+        data-settings='{"id" : "demoapp"}'>
+    </div>
+
+</body>
+</html> 
+
+======================================================================================
+Component.js
+
+sap.ui.define([
+    "sap/ui/core/UIComponent"
+], function(UIComponent) {
+    "use strict";
+
+    return UIComponent.extend("demo.custom.customcontrol.Component", {
+
+        metadata: {
+            manifest: "json"
+        },
+
+        init: function() {
+
+            UIComponent.prototype.init.apply(this, arguments);
+
+        }
+
+    });
+});
+
+=================================================================================
+app.view
+
+<mvc:View
+    controllerName="demo.custom.customcontrol.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:custom="demo.custom.customcontrol.control">
+
+    <App>
+
+        <pages>
+
+            <Page title="SAPUI5 Custom Control">
+
+                <content>
+
+                    <VBox class="sapUiSmallMargin">
+
+                        <custom:MyText
+                            text="Hello from Custom Control" />
+
+                    </VBox>
+
+                </content>
+
+            </Page>
+
+        </pages>
+
+    </App>
+
+</mvc:View>
+
+==================================================================================
+sap.ui.define([
+    "sap/ui/core/mvc/Controller"
+], function(Controller) {
+    "use strict";
+
+    return Controller.extend("demo.custom.customcontrol.controller.App", {
+
+        onInit: function() {
+
+        }
+
+    });
+});
+
+===============================================================================
+mytext.js 
+
+sap.ui.define([
+    "sap/ui/core/Control"
+], function(Control) {
+    "use strict";
+
+    return Control.extend("demo.custom.customcontrol.control.MyText", {
+
+        metadata: {
+            properties: {
+                text: {
+                    type: "string",
+                    defaultValue: "Default Text"
+                }
+            }
+        },
+
+        renderer: function(oRm, oControl) {
+
+            oRm.openStart("div", oControl);
+            oRm.style("border", "2px solid #0070f2");
+            oRm.style("padding", "15px");
+            oRm.style("margin", "10px");
+            oRm.style("border-radius", "8px");
+            oRm.openEnd();
+
+            oRm.text(oControl.getText());
+
+            oRm.close("div");
+        }
+
+    });
+});
+
+
